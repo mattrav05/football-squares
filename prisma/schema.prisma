@@ -1,0 +1,145 @@
+// Football Squares Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String
+  phone         String?
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  managedGames  Game[]    @relation("GameManager")
+  squares       Square[]
+  gamePlayers   GamePlayer[]
+  jobs          Job[]
+}
+
+model Game {
+  id                  String     @id @default(cuid())
+  name                String
+  gameDate            DateTime
+  teamHome            String
+  teamAway            String
+  status              GameStatus @default(DRAFT)
+  entryCode           String     @unique @default(cuid())
+  pricePerSquare      Decimal?   @db.Decimal(10, 2)
+  payoutQ1            Int        @default(10)
+  payoutQ2            Int        @default(20)
+  payoutQ3            Int        @default(20)
+  payoutFinal         Int        @default(50)
+  numbersRow          Int[]
+  numbersCol          Int[]
+  reservationHours    Int        @default(24)
+  maxSquaresPerPlayer Int        @default(10)
+  colorPrimary        String     @default("#3b82f6")
+  colorSecondary      String     @default("#10b981")
+  lockedAt            DateTime?
+  paidAt              DateTime?
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  managerId           String
+  manager             User       @relation("GameManager", fields: [managerId], references: [id])
+
+  squares             Square[]
+  players             GamePlayer[]
+}
+
+enum GameStatus {
+  DRAFT
+  OPEN
+  LOCKED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Square {
+  id          String       @id @default(cuid())
+  gameId      String
+  rowIndex    Int
+  colIndex    Int
+  status      SquareStatus @default(AVAILABLE)
+  reservedAt  DateTime?
+  confirmedAt DateTime?
+  createdAt   DateTime     @default(now())
+
+  game        Game         @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  playerId    String?
+  player      User?        @relation(fields: [playerId], references: [id])
+
+  @@unique([gameId, rowIndex, colIndex])
+  @@index([gameId])
+  @@index([playerId])
+  @@index([status])
+}
+
+enum SquareStatus {
+  AVAILABLE
+  RESERVED
+  CONFIRMED
+}
+
+model GamePlayer {
+  id        String     @id @default(cuid())
+  gameId    String
+  userId    String
+  role      PlayerRole @default(PLAYER)
+  joinedAt  DateTime   @default(now())
+
+  game      Game       @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id])
+
+  @@unique([gameId, userId])
+}
+
+enum PlayerRole {
+  PLAYER
+  CO_MANAGER
+}
+
+model Job {
+  id          String    @id @default(cuid())
+  type        String
+  payload     Json
+  status      JobStatus @default(PENDING)
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(3)
+  runAt       DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+  error       String?
+
+  userId      String?
+  user        User?     @relation(fields: [userId], references: [id])
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model Payment {
+  id            String    @id @default(cuid())
+  userId        String
+  gameId        String?
+  amount        Decimal   @db.Decimal(10, 2)
+  status        String    @default("pending")
+  stripeId      String?
+  createdAt     DateTime  @default(now())
+  completedAt   DateTime?
+}
