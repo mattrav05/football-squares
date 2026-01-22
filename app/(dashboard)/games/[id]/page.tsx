@@ -7,7 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { GameGrid } from "@/components/grid/game-grid";
 import { LegalDisclaimer } from "@/components/shared/legal-disclaimer";
+import { CopyButton } from "@/components/shared/copy-button";
 import { formatDate, formatCurrency } from "@/lib/utils";
+import { Calendar, DollarSign, Users, CheckCircle, Clock, Share2 } from "lucide-react";
 
 interface GamePageProps {
   params: Promise<{ id: string }>;
@@ -98,74 +100,89 @@ export default async function GamePage({ params }: GamePageProps) {
         )}
       </div>
 
-      {/* Stats & Share */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
+      {/* Stats Cards */}
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+        <Card className="relative overflow-hidden">
+          <div className="absolute right-2 top-2 h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </div>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Available
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{stats.available}</p>
+            <p className="text-3xl font-bold">{stats.available}</p>
+            <p className="text-xs text-muted-foreground">of 100 squares</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="relative overflow-hidden border-yellow-200 dark:border-yellow-900">
+          <div className="absolute right-2 top-2 h-8 w-8 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
+            <Clock className="h-4 w-4 text-yellow-600" />
+          </div>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Reserved
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-yellow-600">{stats.reserved}</p>
+            <p className="text-3xl font-bold text-yellow-600">{stats.reserved}</p>
+            <p className="text-xs text-muted-foreground">pending payment</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="relative overflow-hidden border-green-200 dark:border-green-900">
+          <div className="absolute right-2 top-2 h-8 w-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+            <CheckCircle className="h-4 w-4 text-green-600" />
+          </div>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Confirmed
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-green-600">{stats.confirmed}</p>
+            <p className="text-3xl font-bold text-green-600">{stats.confirmed}</p>
+            <p className="text-xs text-muted-foreground">paid & locked</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="relative overflow-hidden">
+          <div className="absolute right-2 top-2 h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </div>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Price/Square
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">
+            <p className="text-3xl font-bold">
               {game.pricePerSquare
                 ? formatCurrency(Number(game.pricePerSquare))
                 : "Free"}
             </p>
+            <p className="text-xs text-muted-foreground">per square</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Share Link */}
       {isManager && (
-        <Card>
+        <Card className="border-primary/20 bg-primary/5">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Share with Players</CardTitle>
+            <CardTitle className="text-sm flex items-center gap-2">
+              <Share2 className="h-4 w-4" />
+              Share with Players
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center gap-2">
-              <code className="flex-1 rounded bg-muted px-3 py-2 text-sm break-all">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <code className="flex-1 rounded-lg bg-background border px-4 py-3 text-sm break-all font-mono">
                 {shareUrl}
               </code>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  navigator.clipboard.writeText(shareUrl);
-                }}
-              >
-                Copy
-              </Button>
+              <CopyButton text={shareUrl} />
             </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Send this link to friends so they can join and pick squares
+            </p>
           </CardContent>
         </Card>
       )}
