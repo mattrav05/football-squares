@@ -35,49 +35,53 @@ export function Square({
       type="button"
       onClick={onClick}
       className={cn(
-        "w-10 h-10 border border-border text-xs font-medium transition-all duration-150",
-        "hover:scale-105 hover:z-10 hover:shadow-md",
-        "focus:outline-none focus:ring-2 focus:ring-offset-1",
-        "touch-manipulation",
-        // Available
-        square.status === "AVAILABLE" && "bg-background hover:bg-muted",
-        // Reserved (pending)
+        "w-10 h-10 rounded-sm text-xs font-medium transition-all duration-150",
+        "hover:scale-110 hover:z-10 hover:shadow-lg",
+        "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1",
+        "touch-manipulation active:scale-95",
+        // Available - dashed border, empty
+        square.status === "AVAILABLE" && !isSelected &&
+          "bg-background border-2 border-dashed border-muted-foreground/20 hover:border-primary/50 hover:bg-primary/5",
+        // Reserved (pending) - yellow
         square.status === "RESERVED" &&
           !isOwn &&
-          "bg-yellow-100 dark:bg-yellow-900/30",
-        // Confirmed
+          "bg-yellow-400/80 dark:bg-yellow-500/60 text-yellow-900 dark:text-yellow-100 border border-yellow-500/50",
+        // Confirmed - green
         square.status === "CONFIRMED" &&
           !isOwn &&
-          "bg-green-100 dark:bg-green-900/30",
-        // Own squares
-        isOwn && square.status === "RESERVED" && "bg-yellow-200 dark:bg-yellow-800/50",
-        isOwn && square.status === "CONFIRMED" && "bg-green-200 dark:bg-green-800/50",
-        // Selected for reservation
-        isSelected && "ring-2 ring-offset-1"
+          "bg-green-500/80 dark:bg-green-500/60 text-white border border-green-600/50",
+        // Own reserved squares - highlighted yellow
+        isOwn && square.status === "RESERVED" &&
+          "bg-yellow-400 dark:bg-yellow-500 text-yellow-900 dark:text-yellow-100 border-2 shadow-md",
+        // Own confirmed squares - highlighted green
+        isOwn && square.status === "CONFIRMED" &&
+          "bg-green-500 dark:bg-green-600 text-white border-2 shadow-md",
+        // Selected for reservation - ring effect
+        isSelected && "ring-2 ring-offset-2 bg-primary/10 border-primary border-2"
       )}
       style={{
-        ...(isSelected && { ringColor: colorPrimary }),
         ...(isOwn && { borderColor: colorPrimary }),
+        ...(isSelected && { borderColor: colorPrimary }),
       }}
       title={
         square.player
           ? `${square.player.name} (${square.status.toLowerCase()})`
           : square.status === "AVAILABLE"
-          ? "Available"
+          ? "Click to select"
           : ""
       }
     >
       {square.player ? (
         <span
           className={cn(
-            "block truncate",
+            "block truncate text-[10px]",
             isOwn && "font-bold"
           )}
         >
           {getInitials(square.player.name)}
         </span>
       ) : isSelected ? (
-        <span style={{ color: colorPrimary }}>+</span>
+        <span className="text-primary font-bold text-sm">+</span>
       ) : null}
     </button>
   );

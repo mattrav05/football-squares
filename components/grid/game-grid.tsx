@@ -172,13 +172,13 @@ export function GameGrid({
       <GridLegend />
 
       {/* Grid Container */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto pb-4">
         <div className="inline-block min-w-fit">
           {/* Away Team Header */}
           <div className="flex">
-            <div className="w-12 h-8" /> {/* Corner spacer */}
+            <div className="w-12 h-10" /> {/* Corner spacer */}
             <div
-              className="flex-1 text-center font-bold text-sm py-1 rounded-t-md"
+              className="flex-1 text-center font-bold text-sm py-2 rounded-t-lg shadow-sm"
               style={{ backgroundColor: colorSecondary, color: "#fff" }}
             >
               {teamAway}
@@ -187,14 +187,18 @@ export function GameGrid({
 
           {/* Column Numbers */}
           <div className="flex">
-            <div className="w-12 h-8" /> {/* Corner spacer */}
+            <div className="w-12 h-10" /> {/* Corner spacer */}
             {Array.from({ length: 10 }).map((_, col) => (
               <div
                 key={col}
-                className="w-10 h-8 flex items-center justify-center text-sm font-medium"
-                style={{ backgroundColor: colorSecondary + "20" }}
+                className="w-10 h-10 flex items-center justify-center text-sm font-bold rounded-sm mx-px"
+                style={{ backgroundColor: colorSecondary + "30" }}
               >
-                {hasNumbers ? numbersCol[col] : "?"}
+                {hasNumbers ? (
+                  <span className="text-foreground">{numbersCol[col]}</span>
+                ) : (
+                  <span className="text-muted-foreground text-xs">?</span>
+                )}
               </div>
             ))}
           </div>
@@ -204,26 +208,32 @@ export function GameGrid({
             {/* Home Team & Row Numbers */}
             <div className="flex flex-col">
               <div
-                className="w-12 flex items-center justify-center font-bold text-xs writing-vertical-lr rotate-180 rounded-l-md"
+                className="w-12 flex items-center justify-center font-bold text-xs rounded-l-lg shadow-sm"
                 style={{
                   backgroundColor: colorPrimary,
                   color: "#fff",
-                  height: `${10 * 40}px`,
+                  height: `${10 * 40 + 9}px`,
+                  writingMode: "vertical-rl",
+                  transform: "rotate(180deg)",
                 }}
               >
                 {teamHome}
               </div>
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-px">
               {/* Row Numbers */}
               {Array.from({ length: 10 }).map((_, row) => (
-                <div key={row} className="flex">
+                <div key={row} className="flex gap-px">
                   <div
-                    className="w-8 h-10 flex items-center justify-center text-sm font-medium"
-                    style={{ backgroundColor: colorPrimary + "20" }}
+                    className="w-10 h-10 flex items-center justify-center text-sm font-bold rounded-sm"
+                    style={{ backgroundColor: colorPrimary + "30" }}
                   >
-                    {hasNumbers ? numbersRow[row] : "?"}
+                    {hasNumbers ? (
+                      <span className="text-foreground">{numbersRow[row]}</span>
+                    ) : (
+                      <span className="text-muted-foreground text-xs">?</span>
+                    )}
                   </div>
 
                   {/* Squares */}
