@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { stripe, GAME_CREATION_PRICE } from "@/lib/stripe";
+import { getStripe, GAME_CREATION_PRICE } from "@/lib/stripe";
 
 export async function POST(request: Request) {
   try {
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await getStripe().paymentIntents.create({
       amount: GAME_CREATION_PRICE,
       currency: "usd",
       metadata: {
