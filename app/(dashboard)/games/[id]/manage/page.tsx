@@ -3,10 +3,11 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PendingConfirmations } from "@/components/dashboard/pending-confirmations";
 import { formatDate } from "@/lib/utils";
+import { Grid3X3, CheckCircle, Clock, Users, Lock, Mail, Download, Zap } from "lucide-react";
 
 interface ManagePageProps {
   params: Promise<{ id: string }>;
@@ -97,54 +98,78 @@ export default async function ManagePage({ params }: ManagePageProps) {
 
       {/* Stats */}
       <div className="grid gap-4 sm:grid-cols-4">
-        <Card>
+        <Card className="relative overflow-hidden">
+          <div className="absolute right-2 top-2 h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+            <Grid3X3 className="h-4 w-4 text-muted-foreground" />
+          </div>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Total Squares
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{stats.total}</p>
+            <p className="text-3xl font-bold">{stats.total}</p>
+            <p className="text-xs text-muted-foreground">in grid</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="relative overflow-hidden">
+          <div className="absolute right-2 top-2 h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </div>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Available
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{stats.available}</p>
+            <p className="text-3xl font-bold">{stats.available}</p>
+            <p className="text-xs text-muted-foreground">open to claim</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="relative overflow-hidden border-yellow-200 dark:border-yellow-900">
+          <div className="absolute right-2 top-2 h-8 w-8 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
+            <Clock className="h-4 w-4 text-yellow-600" />
+          </div>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Pending Payment
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-yellow-600">{stats.reserved}</p>
+            <p className="text-3xl font-bold text-yellow-600">{stats.reserved}</p>
+            <p className="text-xs text-muted-foreground">awaiting payment</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="relative overflow-hidden border-green-200 dark:border-green-900">
+          <div className="absolute right-2 top-2 h-8 w-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+            <CheckCircle className="h-4 w-4 text-green-600" />
+          </div>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Confirmed
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-green-600">{stats.confirmed}</p>
+            <p className="text-3xl font-bold text-green-600">{stats.confirmed}</p>
+            <p className="text-xs text-muted-foreground">paid & locked</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Quick Actions */}
       <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
+        <CardHeader className="pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Zap className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <CardTitle>Quick Actions</CardTitle>
+              <CardDescription>Manage your game status and communicate with players</CardDescription>
+            </div>
+          </div>
         </CardHeader>
-        <CardContent className="flex flex-wrap gap-4">
+        <CardContent className="flex flex-wrap gap-3">
           {game.status === "OPEN" && (
             <form
               action={async () => {
@@ -164,15 +189,18 @@ export default async function ManagePage({ params }: ManagePageProps) {
                 });
               }}
             >
-              <Button type="submit" variant="destructive">
+              <Button type="submit" variant="destructive" className="gap-2">
+                <Lock className="h-4 w-4" />
                 Lock Grid & Generate Numbers
               </Button>
             </form>
           )}
-          <Button variant="outline" disabled>
+          <Button variant="outline" disabled className="gap-2">
+            <Mail className="h-4 w-4" />
             Send Reminders
           </Button>
-          <Button variant="outline" disabled>
+          <Button variant="outline" disabled className="gap-2">
+            <Download className="h-4 w-4" />
             Export Data
           </Button>
         </CardContent>
@@ -183,8 +211,16 @@ export default async function ManagePage({ params }: ManagePageProps) {
 
       {/* All Players */}
       <Card>
-        <CardHeader>
-          <CardTitle>All Players ({game.players.length})</CardTitle>
+        <CardHeader className="pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
+              <Users className="h-5 w-5 text-blue-600" />
+            </div>
+            <div>
+              <CardTitle>All Players ({game.players.length})</CardTitle>
+              <CardDescription>Players who have joined your game</CardDescription>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           {game.players.length === 0 ? (
