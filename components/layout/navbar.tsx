@@ -107,22 +107,34 @@ export function Navbar() {
           ) : (
             <>
               {/* Desktop nav */}
-              <div className="hidden sm:flex items-center gap-2">
-                <Button variant="ghost" asChild>
-                  <Link href="/login">Sign in</Link>
-                </Button>
-                <Button asChild>
-                  <Link href="/register">Get Started</Link>
-                </Button>
+              <div className="hidden sm:flex items-center gap-3">
+                <Link
+                  href="/login"
+                  className="inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/register"
+                  className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
+                >
+                  Get Started
+                </Link>
               </div>
-              {/* Mobile nav - show buttons directly instead of hamburger when logged out */}
+              {/* Mobile nav */}
               <div className="flex sm:hidden items-center gap-2">
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href="/login">Sign in</Link>
-                </Button>
-                <Button size="sm" asChild>
-                  <Link href="/register">Start</Link>
-                </Button>
+                <Link
+                  href="/login"
+                  className="inline-flex h-8 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors hover:bg-accent"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/register"
+                  className="inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
+                >
+                  Start
+                </Link>
               </div>
             </>
           )}

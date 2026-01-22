@@ -79,6 +79,7 @@ export async function POST(request: Request) {
         payoutQ3: data.payoutQ3,
         payoutFinal: data.payoutFinal,
         reservationHours: data.reservationHours,
+        autoReleaseEnabled: data.autoReleaseEnabled,
         maxSquaresPerPlayer: data.maxSquaresPerPlayer,
         colorPrimary: data.colorPrimary,
         colorSecondary: data.colorSecondary,

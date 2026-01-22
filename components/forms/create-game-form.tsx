@@ -24,8 +24,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import { createGameSchema, type CreateGameInput } from "@/lib/validations";
-import { Calendar, DollarSign, Settings, Palette, Trophy, Users, Clock, CheckCircle, Grid3X3 } from "lucide-react";
+import { Calendar, DollarSign, Settings, Palette, Trophy, Users, Clock, CheckCircle, Grid3X3, Timer, TimerOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const COLOR_PRESETS = [
@@ -54,6 +56,7 @@ export function CreateGameForm() {
       payoutQ3: 20,
       payoutFinal: 50,
       reservationHours: 24,
+      autoReleaseEnabled: true,
       maxSquaresPerPlayer: 10,
       colorPrimary: "#3b82f6",
       colorSecondary: "#10b981",
@@ -332,66 +335,104 @@ export function CreateGameForm() {
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
+          <CardContent className="space-y-6">
+            {/* Auto-Release Toggle */}
+            <FormField
+              control={form.control}
+              name="autoReleaseEnabled"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2">
+                      {field.value ? (
+                        <Timer className="h-4 w-4 text-orange-500" />
+                      ) : (
+                        <TimerOff className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      <FormLabel className="text-base">Auto-Release Unpaid Squares</FormLabel>
+                    </div>
+                    <FormDescription>
+                      {field.value
+                        ? "Squares that aren't paid for will be automatically released back to the pool"
+                        : "Squares will remain reserved until manually released by the manager"}
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {/* Reservation Hours Slider - only shown when auto-release is enabled */}
+            {form.watch("autoReleaseEnabled") && (
               <FormField
                 control={form.control}
                 name="reservationHours"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Reservation Expiry (hours)</FormLabel>
-                    <Select
-                      onValueChange={(v) => field.onChange(parseInt(v))}
-                      defaultValue={field.value?.toString()}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select hours" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="12">12 hours</SelectItem>
-                        <SelectItem value="24">24 hours</SelectItem>
-                        <SelectItem value="48">48 hours</SelectItem>
-                        <SelectItem value="72">72 hours</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Time Before Auto-Release</FormLabel>
+                      <span className="text-sm font-medium text-primary">
+                        {field.value} hours
+                      </span>
+                    </div>
+                    <FormControl>
+                      <Slider
+                        min={1}
+                        max={168}
+                        step={1}
+                        value={[field.value]}
+                        onValueChange={(value) => field.onChange(value[0])}
+                        className="py-4"
+                      />
+                    </FormControl>
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>1 hour</span>
+                      <span>1 day</span>
+                      <span>3 days</span>
+                      <span>1 week</span>
+                    </div>
                     <FormDescription>
-                      Unpaid squares are released after this time.
+                      Reserved squares will be released back to the pool if payment isn&apos;t confirmed within this time.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+            )}
 
-              <FormField
-                control={form.control}
-                name="maxSquaresPerPlayer"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Max Squares Per Player</FormLabel>
-                    <Select
-                      onValueChange={(v) => field.onChange(parseInt(v))}
-                      defaultValue={field.value?.toString()}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select max" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="5">5 squares</SelectItem>
-                        <SelectItem value="10">10 squares</SelectItem>
-                        <SelectItem value="15">15 squares</SelectItem>
-                        <SelectItem value="20">20 squares</SelectItem>
-                        <SelectItem value="100">Unlimited</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            {/* Max Squares Per Player */}
+            <FormField
+              control={form.control}
+              name="maxSquaresPerPlayer"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Max Squares Per Player</FormLabel>
+                  <Select
+                    onValueChange={(v) => field.onChange(parseInt(v))}
+                    defaultValue={field.value?.toString()}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select max" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="5">5 squares</SelectItem>
+                      <SelectItem value="10">10 squares</SelectItem>
+                      <SelectItem value="15">15 squares</SelectItem>
+                      <SelectItem value="20">20 squares</SelectItem>
+                      <SelectItem value="100">Unlimited</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 

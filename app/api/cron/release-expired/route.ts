@@ -14,9 +14,12 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Find all games that are OPEN
+    // Find all games that are OPEN and have auto-release enabled
     const openGames = await prisma.game.findMany({
-      where: { status: "OPEN" },
+      where: {
+        status: "OPEN",
+        autoReleaseEnabled: true,
+      },
       select: { id: true, reservationHours: true },
     });
 

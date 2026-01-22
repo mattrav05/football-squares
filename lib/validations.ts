@@ -26,6 +26,7 @@ export const createGameSchema = z.object({
   payoutQ3: z.number().min(0).max(100),
   payoutFinal: z.number().min(0).max(100),
   reservationHours: z.number().min(1).max(168),
+  autoReleaseEnabled: z.boolean(),
   maxSquaresPerPlayer: z.number().min(1).max(100),
   colorPrimary: z.string(),
   colorSecondary: z.string(),

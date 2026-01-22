@@ -19,12 +19,18 @@ export default function HomePage() {
               Share your grid, track picks in real-time, and enjoy the game.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Button size="lg" asChild>
-                <Link href="/register">Create Your Game</Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/login">Join a Game</Link>
-              </Button>
+              <Link
+                href="/register"
+                className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                Create Your Game
+              </Link>
+              <Link
+                href="/login"
+                className="inline-flex h-11 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                Join a Game
+              </Link>
             </div>
           </div>
         </div>
@@ -209,9 +215,9 @@ export default function HomePage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold">Auto-Release</h3>
+                <h3 className="font-semibold">Flexible Auto-Release</h3>
                 <p className="text-sm text-muted-foreground">
-                  Unpaid squares automatically release after 24 hours.
+                  Set custom release timers (1 hour to 1 week) or disable auto-release entirely.
                 </p>
               </div>
             </div>
@@ -370,9 +376,12 @@ export default function HomePage() {
                     <span className="text-sm">Mobile-friendly design</span>
                   </li>
                 </ul>
-                <Button className="w-full" size="lg" asChild>
-                  <Link href="/register">Get Started</Link>
-                </Button>
+                <Link
+                  href="/register"
+                  className="inline-flex w-full h-11 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                >
+                  Get Started
+                </Link>
                 <p className="text-center text-xs text-muted-foreground">
                   Players join for free
                 </p>
@@ -392,14 +401,12 @@ export default function HomePage() {
             Create your first game in minutes and invite your friends to play.
           </p>
           <div className="mt-10">
-            <Button
-              size="lg"
-              variant="secondary"
-              className="bg-white text-primary hover:bg-white/90"
-              asChild
+            <Link
+              href="/register"
+              className="inline-flex h-11 items-center justify-center rounded-md bg-white px-8 text-sm font-medium text-primary shadow transition-colors hover:bg-white/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             >
-              <Link href="/register">Create Your Game Now</Link>
-            </Button>
+              Create Your Game Now
+            </Link>
           </div>
         </div>
       </section>

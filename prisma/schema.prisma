@@ -42,6 +42,7 @@ model Game {
   numbersRow          Int[]
   numbersCol          Int[]
   reservationHours    Int        @default(24)
+  autoReleaseEnabled  Boolean    @default(true)
   maxSquaresPerPlayer Int        @default(10)
   colorPrimary        String     @default("#3b82f6")
   colorSecondary      String     @default("#10b981")
