@@ -108,33 +108,33 @@ export function Navbar() {
             <>
               {/* Desktop nav */}
               <div className="hidden sm:flex items-center gap-3">
-                <Link
+                <a
                   href="/login"
                   className="inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
                 >
                   Sign in
-                </Link>
-                <Link
+                </a>
+                <a
                   href="/register"
                   className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
                 >
                   Get Started
-                </Link>
+                </a>
               </div>
               {/* Mobile nav */}
               <div className="flex sm:hidden items-center gap-2">
-                <Link
+                <a
                   href="/login"
                   className="inline-flex h-8 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors hover:bg-accent"
                 >
                   Sign in
-                </Link>
-                <Link
+                </a>
+                <a
                   href="/register"
                   className="inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
                 >
                   Start
-                </Link>
+                </a>
               </div>
             </>
           )}

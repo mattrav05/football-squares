@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LegalDisclaimer } from "@/components/shared/legal-disclaimer";
@@ -19,18 +18,18 @@ export default function HomePage() {
               Share your grid, track picks in real-time, and enjoy the game.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Link
+              <a
                 href="/register"
                 className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               >
                 Create Your Game
-              </Link>
-              <Link
+              </a>
+              <a
                 href="/login"
                 className="inline-flex h-11 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               >
                 Join a Game
-              </Link>
+              </a>
             </div>
           </div>
         </div>
@@ -376,12 +375,12 @@ export default function HomePage() {
                     <span className="text-sm">Mobile-friendly design</span>
                   </li>
                 </ul>
-                <Link
+                <a
                   href="/register"
                   className="inline-flex w-full h-11 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
                   Get Started
-                </Link>
+                </a>
                 <p className="text-center text-xs text-muted-foreground">
                   Players join for free
                 </p>
@@ -401,12 +400,12 @@ export default function HomePage() {
             Create your first game in minutes and invite your friends to play.
           </p>
           <div className="mt-10">
-            <Link
+            <a
               href="/register"
               className="inline-flex h-11 items-center justify-center rounded-md bg-white px-8 text-sm font-medium text-primary shadow transition-colors hover:bg-white/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             >
               Create Your Game Now
-            </Link>
+            </a>
           </div>
         </div>
       </section>
