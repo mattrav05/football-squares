@@ -23,8 +23,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { createGameSchema, type CreateGameInput } from "@/lib/validations";
+import { Calendar, DollarSign, Settings, Palette, Trophy, Users, Clock, CheckCircle, Grid3X3 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const COLOR_PRESETS = [
   { name: "Classic Blue", primary: "#3b82f6", secondary: "#10b981" },
@@ -100,8 +102,16 @@ export function CreateGameForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         {/* Basic Info */}
         <Card>
-          <CardHeader>
-            <CardTitle>Game Details</CardTitle>
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Grid3X3 className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <CardTitle>Game Details</CardTitle>
+                <CardDescription>Basic information about your squares game</CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField
@@ -193,13 +203,18 @@ export function CreateGameForm() {
 
         {/* Payout Structure */}
         <Card>
-          <CardHeader>
-            <CardTitle>Payout Structure</CardTitle>
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-500/10">
+                <Trophy className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <CardTitle>Payout Structure</CardTitle>
+                <CardDescription>Set the percentage of the pot for each quarter</CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Set the percentage of the pot for each quarter. Must total 100%.
-            </p>
 
             <div className="grid gap-4 sm:grid-cols-4">
               <FormField
@@ -283,20 +298,39 @@ export function CreateGameForm() {
               />
             </div>
 
-            <p
-              className={`text-sm font-medium ${
-                payoutTotal === 100 ? "text-green-600" : "text-red-600"
-              }`}
+            <div
+              className={cn(
+                "flex items-center gap-2 rounded-lg p-3 text-sm font-medium",
+                payoutTotal === 100
+                  ? "bg-green-500/10 text-green-700 dark:text-green-400"
+                  : "bg-red-500/10 text-red-700 dark:text-red-400"
+              )}
             >
-              Total: {payoutTotal}% {payoutTotal !== 100 && "(must equal 100%)"}
-            </p>
+              {payoutTotal === 100 ? (
+                <CheckCircle className="h-4 w-4" />
+              ) : (
+                <Clock className="h-4 w-4" />
+              )}
+              <span>
+                Total: {payoutTotal}%
+                {payoutTotal !== 100 && " (must equal 100%)"}
+              </span>
+            </div>
           </CardContent>
         </Card>
 
         {/* Settings */}
         <Card>
-          <CardHeader>
-            <CardTitle>Settings</CardTitle>
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-500/10">
+                <Settings className="h-5 w-5 text-orange-600" />
+              </div>
+              <div>
+                <CardTitle>Game Settings</CardTitle>
+                <CardDescription>Configure reservation rules and limits</CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
@@ -363,29 +397,85 @@ export function CreateGameForm() {
 
         {/* Colors */}
         <Card>
-          <CardHeader>
-            <CardTitle>Theme Colors</CardTitle>
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500/10">
+                <Palette className="h-5 w-5 text-purple-600" />
+              </div>
+              <div>
+                <CardTitle>Theme Colors</CardTitle>
+                <CardDescription>Choose team colors for your grid</CardDescription>
+              </div>
+            </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex flex-wrap gap-2">
-              {COLOR_PRESETS.map((preset) => (
-                <button
-                  key={preset.name}
-                  type="button"
-                  onClick={() => applyColorPreset(preset.primary, preset.secondary)}
-                  className="flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm hover:bg-muted transition-colors"
-                >
+          <CardContent className="space-y-6">
+            {/* Color Preview */}
+            <div className="rounded-lg border p-4 bg-muted/30">
+              <p className="text-xs text-muted-foreground mb-3 font-medium uppercase tracking-wider">Preview</p>
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
                   <div
-                    className="h-4 w-4 rounded-full"
-                    style={{ backgroundColor: preset.primary }}
-                  />
+                    className="h-8 rounded-t-md flex items-center justify-center text-xs font-semibold text-white"
+                    style={{ backgroundColor: form.watch("colorPrimary") }}
+                  >
+                    HOME
+                  </div>
                   <div
-                    className="h-4 w-4 rounded-full"
-                    style={{ backgroundColor: preset.secondary }}
-                  />
-                  <span>{preset.name}</span>
-                </button>
-              ))}
+                    className="h-8 rounded-b-md flex items-center justify-center text-xs font-semibold text-white"
+                    style={{ backgroundColor: form.watch("colorSecondary") }}
+                  >
+                    AWAY
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-1">
+                  {[...Array(9)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-6 h-6 rounded-sm border"
+                      style={{
+                        backgroundColor: i % 2 === 0
+                          ? `${form.watch("colorPrimary")}20`
+                          : `${form.watch("colorSecondary")}20`,
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-medium mb-3">Quick Presets</p>
+              <div className="flex flex-wrap gap-2">
+                {COLOR_PRESETS.map((preset) => {
+                  const isSelected =
+                    form.watch("colorPrimary") === preset.primary &&
+                    form.watch("colorSecondary") === preset.secondary;
+                  return (
+                    <button
+                      key={preset.name}
+                      type="button"
+                      onClick={() => applyColorPreset(preset.primary, preset.secondary)}
+                      className={cn(
+                        "flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-all",
+                        isSelected
+                          ? "border-primary bg-primary/10 ring-2 ring-primary ring-offset-2"
+                          : "hover:bg-muted"
+                      )}
+                    >
+                      <div
+                        className="h-4 w-4 rounded-full ring-1 ring-black/10"
+                        style={{ backgroundColor: preset.primary }}
+                      />
+                      <div
+                        className="h-4 w-4 rounded-full ring-1 ring-black/10"
+                        style={{ backgroundColor: preset.secondary }}
+                      />
+                      <span>{preset.name}</span>
+                      {isSelected && <CheckCircle className="h-3 w-3 text-primary" />}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -434,9 +524,31 @@ export function CreateGameForm() {
           </CardContent>
         </Card>
 
-        <Button type="submit" size="lg" className="w-full" disabled={isLoading}>
-          {isLoading ? "Creating Game..." : "Create Game"}
-        </Button>
+        <div className="sticky bottom-4 pt-4">
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full h-14 text-lg font-semibold shadow-lg"
+            disabled={isLoading || payoutTotal !== 100}
+          >
+            {isLoading ? (
+              <>
+                <div className="mr-2 h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                Creating Game...
+              </>
+            ) : (
+              <>
+                <Grid3X3 className="mr-2 h-5 w-5" />
+                Create Game
+              </>
+            )}
+          </Button>
+          {payoutTotal !== 100 && (
+            <p className="text-center text-sm text-destructive mt-2">
+              Payout percentages must total 100% to create the game
+            </p>
+          )}
+        </div>
       </form>
     </Form>
   );
