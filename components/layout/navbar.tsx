@@ -106,7 +106,8 @@ export function Navbar() {
             </>
           ) : (
             <>
-              <div className="hidden md:flex items-center gap-2">
+              {/* Desktop nav */}
+              <div className="hidden sm:flex items-center gap-2">
                 <Button variant="ghost" asChild>
                   <Link href="/login">Sign in</Link>
                 </Button>
@@ -114,7 +115,15 @@ export function Navbar() {
                   <Link href="/register">Get Started</Link>
                 </Button>
               </div>
-              <MobileNav />
+              {/* Mobile nav - show buttons directly instead of hamburger when logged out */}
+              <div className="flex sm:hidden items-center gap-2">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/login">Sign in</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/register">Start</Link>
+                </Button>
+              </div>
             </>
           )}
         </div>
