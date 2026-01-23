@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DeleteGameButton } from "@/components/dashboard/delete-game-button";
 import { formatDate } from "@/lib/utils";
 
 interface SettingsPageProps {
@@ -15,6 +16,10 @@ interface SettingsPageProps {
 async function getGameForManager(id: string, userId: string) {
   return prisma.game.findUnique({
     where: { id, managerId: userId },
+    include: {
+      players: { select: { id: true } },
+      squares: { where: { status: { not: "AVAILABLE" } }, select: { id: true } },
+    },
   });
 }
 
@@ -58,18 +63,6 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
     redirect(`/games/${id}`);
   }
 
-  async function deleteGame() {
-    "use server";
-
-    const sess = await auth();
-    if (!sess?.user?.id) return;
-
-    await prisma.game.delete({
-      where: { id, managerId: sess.user.id },
-    });
-
-    redirect("/dashboard");
-  }
 
   return (
     <div className="mx-auto max-w-2xl space-y-8">
@@ -212,11 +205,12 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={deleteGame}>
-            <Button type="submit" variant="destructive">
-              Delete Game
-            </Button>
-          </form>
+          <DeleteGameButton
+            gameId={game.id}
+            gameName={game.name}
+            playerCount={game.players.length}
+            squaresClaimed={game.squares.length}
+          />
         </CardContent>
       </Card>
     </div>
