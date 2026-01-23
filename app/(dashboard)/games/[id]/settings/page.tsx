@@ -120,7 +120,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="colorPrimary">Primary Color</Label>
+                <Label htmlFor="colorPrimary">Row Team Color</Label>
                 <div className="flex gap-2">
                   <Input
                     id="colorPrimary"
@@ -138,7 +138,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="colorSecondary">Secondary Color</Label>
+                <Label htmlFor="colorSecondary">Column Team Color</Label>
                 <div className="flex gap-2">
                   <Input
                     id="colorSecondary"

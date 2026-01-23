@@ -51,10 +51,10 @@ export function CreateGameForm() {
       teamHome: "",
       teamAway: "",
       pricePerSquare: undefined,
-      payoutQ1: 10,
-      payoutQ2: 20,
-      payoutQ3: 20,
-      payoutFinal: 50,
+      payoutQ1: 25,
+      payoutQ2: 25,
+      payoutQ3: 25,
+      payoutFinal: 25,
       reservationHours: 24,
       autoReleaseEnabled: true,
       maxSquaresPerPlayer: 10,
@@ -566,7 +566,7 @@ export function CreateGameForm() {
                 name="colorPrimary"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Primary Color</FormLabel>
+                    <FormLabel>Row Team Color</FormLabel>
                     <div className="flex gap-2">
                       <FormControl>
                         <Input type="color" className="h-10 w-16" {...field} />
@@ -587,7 +587,7 @@ export function CreateGameForm() {
                 name="colorSecondary"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Secondary Color</FormLabel>
+                    <FormLabel>Column Team Color</FormLabel>
                     <div className="flex gap-2">
                       <FormControl>
                         <Input type="color" className="h-10 w-16" {...field} />
