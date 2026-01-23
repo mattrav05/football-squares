@@ -7,8 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CardDescription } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { getTimeRemaining } from "@/lib/utils";
-import { Clock } from "lucide-react";
+import { Clock, ShieldCheck, AlertTriangle } from "lucide-react";
 
 interface Square {
   id: string;
@@ -40,6 +50,7 @@ export function PendingConfirmations({
   const router = useRouter();
   const [selectedSquares, setSelectedSquares] = useState<Set<string>>(new Set());
   const [isConfirming, setIsConfirming] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const toggleSquare = (squareId: string) => {
     setSelectedSquares((prev) => {
@@ -85,7 +96,21 @@ export function PendingConfirmations({
       toast.error("Something went wrong");
     } finally {
       setIsConfirming(false);
+      setShowConfirmDialog(false);
     }
+  };
+
+  // Get the square numbers for display in dialog
+  const getSelectedSquareNumbers = () => {
+    const numbers: number[] = [];
+    players.forEach(({ squares }) => {
+      squares.forEach((sq) => {
+        if (selectedSquares.has(sq.id)) {
+          numbers.push(sq.rowIndex * 10 + sq.colIndex + 1);
+        }
+      });
+    });
+    return numbers.sort((a, b) => a - b);
   };
 
   if (players.length === 0) {
@@ -123,10 +148,8 @@ export function PendingConfirmations({
             </div>
           </div>
           {selectedSquares.size > 0 && (
-            <Button onClick={confirmSelected} disabled={isConfirming} className="bg-green-600 hover:bg-green-700">
-              {isConfirming
-                ? "Confirming..."
-                : `Confirm ${selectedSquares.size} Square(s)`}
+            <Button onClick={() => setShowConfirmDialog(true)} className="bg-green-600 hover:bg-green-700">
+              Confirm {selectedSquares.size} Square(s)
             </Button>
           )}
         </div>
@@ -180,6 +203,62 @@ export function PendingConfirmations({
           </div>
         ))}
       </CardContent>
+
+      {/* Confirmation Dialog */}
+      <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <ShieldCheck className="h-5 w-5 text-green-600" />
+              Confirm Payment - Final Action
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-4">
+                <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                  <p className="text-amber-800 dark:text-amber-200 font-medium flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4" />
+                    This action is permanent
+                  </p>
+                  <p className="text-amber-700 dark:text-amber-300 text-sm mt-1">
+                    Once confirmed, these squares <strong>cannot be changed or reassigned</strong>.
+                    This protects the integrity of the game for all players.
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium mb-2">
+                    You are confirming {selectedSquares.size} square(s):
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {getSelectedSquareNumbers().map((num) => (
+                      <span
+                        key={num}
+                        className="inline-flex items-center justify-center bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-sm font-medium px-2 py-0.5 rounded"
+                      >
+                        #{num}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="text-sm text-muted-foreground">
+                  Make sure you have received payment before confirming.
+                </p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isConfirming}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmSelected}
+              disabled={isConfirming}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              {isConfirming ? "Confirming..." : "Yes, Confirm Payment"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }
