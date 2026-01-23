@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 interface SquareProps {
   square: {
     id: string;
+    rowIndex: number;
+    colIndex: number;
     status: "AVAILABLE" | "RESERVED" | "CONFIRMED";
     player?: { id: string; name: string } | null;
   };
@@ -31,6 +33,9 @@ export function Square({
       .toUpperCase()
       .slice(0, 2);
   };
+
+  // Calculate square number 1-100 (row * 10 + col + 1)
+  const squareNumber = square.rowIndex * 10 + square.colIndex + 1;
 
   return (
     <button
@@ -75,18 +80,34 @@ export function Square({
           : ""
       }
     >
-      {square.player ? (
+      <div className="flex flex-col items-center justify-center h-full">
+        {/* Square Number */}
         <span
           className={cn(
-            "block truncate text-[10px]",
-            isOwn && "font-bold"
+            "font-bold",
+            square.player ? "text-[10px] opacity-60" : "text-base",
+            square.status === "AVAILABLE" && !isSelected && "text-muted-foreground/70",
+            isSelected && "text-primary"
           )}
         >
-          {getInitials(square.player.name)}
+          {squareNumber}
         </span>
-      ) : isSelected ? (
-        <span className="text-primary font-bold text-sm">+</span>
-      ) : null}
+        {/* Player Initials */}
+        {square.player && (
+          <span
+            className={cn(
+              "font-bold text-xs leading-tight",
+              isOwn && "font-extrabold"
+            )}
+          >
+            {getInitials(square.player.name)}
+          </span>
+        )}
+        {/* Selection indicator */}
+        {isSelected && !square.player && (
+          <span className="text-primary font-bold text-xs">+</span>
+        )}
+      </div>
     </button>
   );
 }
