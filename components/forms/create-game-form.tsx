@@ -131,18 +131,50 @@ export function CreateGameForm() {
               )}
             />
 
+            {/* Teams with visual diagram */}
+            <div className="rounded-lg border p-4 bg-muted/30 mb-2">
+              <p className="text-xs text-muted-foreground mb-3 font-medium uppercase tracking-wider">How the grid works</p>
+              <div className="flex items-start gap-4">
+                <div className="text-xs text-center">
+                  <div className="w-24 h-6 bg-secondary/30 rounded-t flex items-center justify-center font-medium border-b">
+                    Column Team →
+                  </div>
+                  <div className="flex">
+                    <div className="w-6 h-16 bg-primary/30 rounded-l flex items-center justify-center font-medium border-r" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                      Row ↓
+                    </div>
+                    <div className="grid grid-cols-3 gap-0.5 p-1 bg-muted/50">
+                      {[...Array(9)].map((_, i) => (
+                        <div key={i} className="w-5 h-5 bg-background rounded-sm border" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1 text-sm text-muted-foreground">
+                  <p className="mb-2">Each square is where the two team scores intersect:</p>
+                  <ul className="list-disc list-inside space-y-1 text-xs">
+                    <li><strong>Row Team</strong> score = left side numbers</li>
+                    <li><strong>Column Team</strong> score = top numbers</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
             <div className="grid gap-4 sm:grid-cols-2">
               <FormField
                 control={form.control}
                 name="teamHome"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Row Team (Left Side)</FormLabel>
+                    <FormLabel className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-sm bg-primary" />
+                      Row Team
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="Kansas City Chiefs" {...field} />
                     </FormControl>
                     <FormDescription className="text-xs">
-                      Score shown on rows
+                      Their score determines the row (left side)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -154,12 +186,15 @@ export function CreateGameForm() {
                 name="teamAway"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Column Team (Top)</FormLabel>
+                    <FormLabel className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-sm bg-secondary" />
+                      Column Team
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="San Francisco 49ers" {...field} />
                     </FormControl>
                     <FormDescription className="text-xs">
-                      Score shown on columns
+                      Their score determines the column (top)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -465,13 +500,13 @@ export function CreateGameForm() {
                     className="h-8 rounded-t-md flex items-center justify-center text-xs font-semibold text-white"
                     style={{ backgroundColor: form.watch("colorPrimary") }}
                   >
-                    HOME
+                    ROW TEAM
                   </div>
                   <div
                     className="h-8 rounded-b-md flex items-center justify-center text-xs font-semibold text-white"
                     style={{ backgroundColor: form.watch("colorSecondary") }}
                   >
-                    AWAY
+                    COLUMN TEAM
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-1">
