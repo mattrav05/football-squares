@@ -173,11 +173,11 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
         <CardContent className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <Label className="text-muted-foreground">Home Team</Label>
+              <Label className="text-muted-foreground">Row Team (Left Side)</Label>
               <p className="font-medium">{game.teamHome}</p>
             </div>
             <div>
-              <Label className="text-muted-foreground">Away Team</Label>
+              <Label className="text-muted-foreground">Column Team (Top)</Label>
               <p className="font-medium">{game.teamAway}</p>
             </div>
           </div>

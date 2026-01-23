@@ -169,7 +169,7 @@ export function GameGrid({
       {/* Grid Container */}
       <div className="overflow-x-auto py-4">
         <div className="inline-block">
-          {/* Away Team Header */}
+          {/* Column Team Header */}
           <div className="flex items-center mb-2">
             <div style={{ width: HEADER_OFFSET }} /> {/* Corner spacer */}
             <div
@@ -181,7 +181,7 @@ export function GameGrid({
                 textShadow: "0 1px 2px rgba(0,0,0,0.3)"
               }}
             >
-              {teamAway}
+              {teamAway} <span className="opacity-75 text-sm">(Columns)</span>
             </div>
           </div>
 
@@ -220,10 +220,10 @@ export function GameGrid({
 
           {/* Main Grid Area */}
           <div className="flex" style={{ marginTop: GAP_SIZE }}>
-            {/* Home Team Sidebar */}
+            {/* Row Team Sidebar */}
             <div className="flex">
               <div
-                className="flex items-center justify-center font-bold text-base rounded-l-lg shadow-md tracking-wide"
+                className="flex items-center justify-center font-bold text-sm rounded-l-lg shadow-md tracking-wide"
                 style={{
                   width: SIDEBAR_WIDTH,
                   height: 10 * CELL_SIZE + 9 * GAP_SIZE,
@@ -234,7 +234,7 @@ export function GameGrid({
                   textShadow: "0 1px 2px rgba(0,0,0,0.3)"
                 }}
               >
-                {teamHome}
+                {teamHome} <span className="opacity-75 text-xs ml-1">(Rows)</span>
               </div>
 
               {/* Row Numbers Column */}

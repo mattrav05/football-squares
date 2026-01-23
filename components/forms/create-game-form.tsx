@@ -137,10 +137,13 @@ export function CreateGameForm() {
                 name="teamHome"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Home Team</FormLabel>
+                    <FormLabel>Row Team (Left Side)</FormLabel>
                     <FormControl>
                       <Input placeholder="Kansas City Chiefs" {...field} />
                     </FormControl>
+                    <FormDescription className="text-xs">
+                      Score shown on rows
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -151,10 +154,13 @@ export function CreateGameForm() {
                 name="teamAway"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Away Team</FormLabel>
+                    <FormLabel>Column Team (Top)</FormLabel>
                     <FormControl>
                       <Input placeholder="San Francisco 49ers" {...field} />
                     </FormControl>
+                    <FormDescription className="text-xs">
+                      Score shown on columns
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

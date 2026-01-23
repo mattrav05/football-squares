@@ -84,7 +84,7 @@ export default async function ManagePage({ params }: ManagePageProps) {
         <div>
           <h1 className="text-2xl font-bold">Manage: {game.name}</h1>
           <p className="text-muted-foreground">
-            {game.teamAway} @ {game.teamHome} • {formatDate(game.gameDate)}
+            {game.teamHome} vs {game.teamAway} • {formatDate(game.gameDate)}
           </p>
         </div>
         <div className="flex gap-2">

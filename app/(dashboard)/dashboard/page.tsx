@@ -187,9 +187,9 @@ export default async function DashboardPage() {
                       <div className="space-y-1">
                         <CardTitle className="text-lg line-clamp-1">{game.name}</CardTitle>
                         <CardDescription className="flex items-center gap-1">
-                          <span className="font-medium">{game.teamAway}</span>
-                          <span className="text-muted-foreground">@</span>
                           <span className="font-medium">{game.teamHome}</span>
+                          <span className="text-muted-foreground">vs</span>
+                          <span className="font-medium">{game.teamAway}</span>
                         </CardDescription>
                       </div>
                       <Badge className={`${getStatusColor(game.status)} shrink-0`}>
@@ -263,7 +263,7 @@ export default async function DashboardPage() {
                     </Badge>
                   </div>
                   <CardDescription>
-                    {game.teamAway} @ {game.teamHome}
+                    {game.teamHome} vs {game.teamAway}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

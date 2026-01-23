@@ -122,7 +122,7 @@ export default async function JoinPage({ params }: JoinPageProps) {
             </div>
             <CardTitle className="text-2xl">{game.name}</CardTitle>
             <CardDescription className="text-base">
-              {game.teamAway} @ {game.teamHome}
+              {game.teamHome} vs {game.teamAway}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">

@@ -86,7 +86,7 @@ export default async function GamePage({ params }: GamePageProps) {
             </Badge>
           </div>
           <p className="text-muted-foreground">
-            {game.teamAway} @ {game.teamHome} • {formatDate(game.gameDate)}
+            {game.teamHome} vs {game.teamAway} • {formatDate(game.gameDate)}
           </p>
         </div>
         {isManager && (
