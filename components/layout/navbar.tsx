@@ -92,6 +92,9 @@ export function Navbar() {
                     <DropdownMenuItem asChild>
                       <Link href="/games/create">Create Game</Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/settings">Settings</Link>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       className="cursor-pointer"

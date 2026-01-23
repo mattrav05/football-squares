@@ -74,6 +74,23 @@ export async function POST(request: Request, { params }: RouteParams) {
       );
     }
 
+    // Check if user is blocked
+    const gamePlayer = await prisma.gamePlayer.findUnique({
+      where: {
+        gameId_userId: {
+          gameId: id,
+          userId: session.user.id,
+        },
+      },
+    });
+
+    if (gamePlayer?.blocked) {
+      return NextResponse.json(
+        { message: "You have been blocked from selecting squares in this game" },
+        { status: 403 }
+      );
+    }
+
     // Check max squares per player
     const userCurrentSquares = game.squares.filter(
       (s) => s.playerId === session.user!.id && s.status !== "AVAILABLE"

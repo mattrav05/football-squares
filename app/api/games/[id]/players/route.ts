@@ -86,6 +86,24 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       return NextResponse.json({ message: "Player removed from game" });
     }
 
+    if (action === "block") {
+      await prisma.gamePlayer.updateMany({
+        where: { gameId: id, userId: playerId },
+        data: { blocked: true },
+      });
+
+      return NextResponse.json({ message: "Player blocked from selecting new squares" });
+    }
+
+    if (action === "unblock") {
+      await prisma.gamePlayer.updateMany({
+        where: { gameId: id, userId: playerId },
+        data: { blocked: false },
+      });
+
+      return NextResponse.json({ message: "Player unblocked" });
+    }
+
     return NextResponse.json({ message: "Invalid action" }, { status: 400 });
   } catch (error) {
     console.error("Error managing player:", error);

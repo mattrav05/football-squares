@@ -79,6 +79,13 @@ export function MobileNav() {
                 >
                   Create Game
                 </Link>
+                <Link
+                  href="/settings"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center rounded-md px-2 py-2 text-sm font-medium hover:bg-accent"
+                >
+                  Settings
+                </Link>
               </nav>
               <Separator />
               <Button

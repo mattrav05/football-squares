@@ -18,6 +18,14 @@ export default function LoginPage() {
       </CardHeader>
       <CardContent>
         <LoginForm />
+        <div className="mt-4 text-center text-sm">
+          <Link
+            href="/forgot-password"
+            className="text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
+          >
+            Forgot password?
+          </Link>
+        </div>
         <div className="mt-4 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link

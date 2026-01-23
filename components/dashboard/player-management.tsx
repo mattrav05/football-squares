@@ -23,12 +23,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Users, MoreVertical, Shield, ShieldOff, Trash2, RotateCcw } from "lucide-react";
+import { Users, MoreVertical, Shield, ShieldOff, Trash2, RotateCcw, Ban, CheckCircle } from "lucide-react";
 
 interface Player {
   id: string;
   userId: string;
   role: string;
+  blocked: boolean;
   user: {
     id: string;
     name: string;
@@ -131,6 +132,9 @@ export function PlayerManagement({ gameId, players, squares, managerId }: Player
                         {gp.role === "CO_MANAGER" && (
                           <Badge className="bg-purple-500 text-xs">Co-Manager</Badge>
                         )}
+                        {gp.blocked && (
+                          <Badge variant="destructive" className="text-xs">Blocked</Badge>
+                        )}
                       </div>
                       <p className="text-sm text-muted-foreground truncate">{gp.user.email}</p>
                     </div>
@@ -209,6 +213,29 @@ export function PlayerManagement({ gameId, players, squares, managerId }: Player
                             )}
 
                             <DropdownMenuSeparator />
+
+                            {gp.blocked ? (
+                              <DropdownMenuItem
+                                onClick={() => handleAction(gp.userId, "unblock")}
+                              >
+                                <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
+                                Unblock User
+                              </DropdownMenuItem>
+                            ) : (
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  setConfirmDialog({
+                                    open: true,
+                                    title: "Block User",
+                                    description: `This will block ${gp.user.name} from selecting new squares in this game. Their existing squares will remain unchanged.`,
+                                    action: () => handleAction(gp.userId, "block"),
+                                  })
+                                }
+                              >
+                                <Ban className="h-4 w-4 mr-2 text-orange-500" />
+                                Block User
+                              </DropdownMenuItem>
+                            )}
 
                             <DropdownMenuItem
                               className="text-red-600 focus:text-red-600"
