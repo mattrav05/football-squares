@@ -4,8 +4,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { PendingConfirmations } from "@/components/dashboard/pending-confirmations";
+import { PlayerManagement } from "@/components/dashboard/player-management";
 import { formatDate } from "@/lib/utils";
 import { Grid3X3, CheckCircle, Clock, Users, Lock, Mail, Download, Zap } from "lucide-react";
 
@@ -209,66 +209,17 @@ export default async function ManagePage({ params }: ManagePageProps) {
       {/* Pending Confirmations */}
       <PendingConfirmations gameId={game.id} players={pendingPlayers} />
 
-      {/* All Players */}
-      <Card>
-        <CardHeader className="pb-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
-              <Users className="h-5 w-5 text-blue-600" />
-            </div>
-            <div>
-              <CardTitle>All Players ({game.players.length})</CardTitle>
-              <CardDescription>Players who have joined your game</CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {game.players.length === 0 ? (
-            <p className="text-muted-foreground">No players yet.</p>
-          ) : (
-            <div className="space-y-2">
-              {game.players.map((gp) => {
-                const playerSquares = game.squares.filter(
-                  (s) => s.playerId === gp.userId
-                );
-                const confirmed = playerSquares.filter(
-                  (s) => s.status === "CONFIRMED"
-                ).length;
-                const reserved = playerSquares.filter(
-                  (s) => s.status === "RESERVED"
-                ).length;
-
-                return (
-                  <div
-                    key={gp.id}
-                    className="flex items-center justify-between rounded-lg border p-3"
-                  >
-                    <div>
-                      <p className="font-medium">{gp.user.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {gp.user.email}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {reserved > 0 && (
-                        <Badge variant="outline" className="bg-yellow-50">
-                          {reserved} pending
-                        </Badge>
-                      )}
-                      {confirmed > 0 && (
-                        <Badge variant="outline" className="bg-green-50">
-                          {confirmed} confirmed
-                        </Badge>
-                      )}
-                      <Badge>{gp.role}</Badge>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      {/* Player Management */}
+      <PlayerManagement
+        gameId={game.id}
+        players={game.players}
+        squares={game.squares.map((s) => ({
+          id: s.id,
+          status: s.status,
+          playerId: s.playerId,
+        }))}
+        managerId={game.managerId}
+      />
     </div>
   );
 }
