@@ -30,8 +30,10 @@ interface GameGridProps {
   maxSquaresPerPlayer: number;
 }
 
-const CELL_SIZE = 48; // Bigger cells for better touch targets
+const CELL_SIZE = 56; // Big cells for easy selection
 const GAP_SIZE = 2;
+const SIDEBAR_WIDTH = 40;
+const HEADER_OFFSET = SIDEBAR_WIDTH + CELL_SIZE + GAP_SIZE; // Sidebar + row numbers + gap
 
 export function GameGrid({
   gameId,
@@ -168,10 +170,10 @@ export function GameGrid({
       <div className="overflow-x-auto py-4">
         <div className="inline-block">
           {/* Away Team Header */}
-          <div className="flex items-center mb-1">
-            <div style={{ width: CELL_SIZE + 8 }} /> {/* Corner spacer */}
+          <div className="flex items-center mb-2">
+            <div style={{ width: HEADER_OFFSET }} /> {/* Corner spacer */}
             <div
-              className="text-center font-bold text-sm py-3 rounded-t-lg shadow-md tracking-wide"
+              className="text-center font-bold text-base py-3 rounded-t-lg shadow-md tracking-wide"
               style={{
                 width: gridWidth,
                 backgroundColor: colorSecondary,
@@ -179,14 +181,20 @@ export function GameGrid({
                 textShadow: "0 1px 2px rgba(0,0,0,0.3)"
               }}
             >
-              {teamAway} (TOP)
+              {teamAway}
             </div>
           </div>
 
           {/* Column Numbers Row */}
-          <div className="flex items-center mb-0.5">
-            <div style={{ width: CELL_SIZE + 8 }} /> {/* Corner spacer */}
-            <div className="flex" style={{ gap: GAP_SIZE }}>
+          <div className="flex items-center">
+            <div style={{ width: HEADER_OFFSET }} /> {/* Corner spacer */}
+            <div
+              className="grid"
+              style={{
+                gridTemplateColumns: `repeat(10, ${CELL_SIZE}px)`,
+                gap: GAP_SIZE
+              }}
+            >
               {Array.from({ length: 10 }).map((_, col) => (
                 <div
                   key={col}
@@ -194,16 +202,16 @@ export function GameGrid({
                   style={{
                     width: CELL_SIZE,
                     height: CELL_SIZE,
-                    backgroundColor: colorSecondary + "25",
-                    border: `2px solid ${colorSecondary}40`
+                    backgroundColor: colorSecondary + "30",
+                    border: `2px solid ${colorSecondary}50`
                   }}
                 >
                   {hasNumbers ? (
-                    <span className="text-lg font-extrabold" style={{ color: colorSecondary }}>
+                    <span className="text-xl font-black" style={{ color: colorSecondary }}>
                       {numbersCol[col]}
                     </span>
                   ) : (
-                    <span className="text-2xl font-light text-muted-foreground/50">?</span>
+                    <span className="text-3xl font-light text-muted-foreground/40">?</span>
                   )}
                 </div>
               ))}
@@ -211,14 +219,14 @@ export function GameGrid({
           </div>
 
           {/* Main Grid Area */}
-          <div className="flex">
+          <div className="flex" style={{ marginTop: GAP_SIZE }}>
             {/* Home Team Sidebar */}
-            <div className="flex mr-0.5">
+            <div className="flex">
               <div
-                className="flex items-center justify-center font-bold text-sm rounded-l-lg shadow-md tracking-wide"
+                className="flex items-center justify-center font-bold text-base rounded-l-lg shadow-md tracking-wide"
                 style={{
-                  width: 36,
-                  height: gridWidth,
+                  width: SIDEBAR_WIDTH,
+                  height: 10 * CELL_SIZE + 9 * GAP_SIZE,
                   backgroundColor: colorPrimary,
                   color: "#fff",
                   writingMode: "vertical-rl",
@@ -226,11 +234,18 @@ export function GameGrid({
                   textShadow: "0 1px 2px rgba(0,0,0,0.3)"
                 }}
               >
-                {teamHome} (SIDE)
+                {teamHome}
               </div>
 
               {/* Row Numbers Column */}
-              <div className="flex flex-col" style={{ gap: GAP_SIZE }}>
+              <div
+                className="grid"
+                style={{
+                  gridTemplateRows: `repeat(10, ${CELL_SIZE}px)`,
+                  gap: GAP_SIZE,
+                  marginLeft: GAP_SIZE
+                }}
+              >
                 {Array.from({ length: 10 }).map((_, row) => (
                   <div
                     key={row}
@@ -238,16 +253,16 @@ export function GameGrid({
                     style={{
                       width: CELL_SIZE,
                       height: CELL_SIZE,
-                      backgroundColor: colorPrimary + "25",
-                      border: `2px solid ${colorPrimary}40`
+                      backgroundColor: colorPrimary + "30",
+                      border: `2px solid ${colorPrimary}50`
                     }}
                   >
                     {hasNumbers ? (
-                      <span className="text-lg font-extrabold" style={{ color: colorPrimary }}>
+                      <span className="text-xl font-black" style={{ color: colorPrimary }}>
                         {numbersRow[row]}
                       </span>
                     ) : (
-                      <span className="text-2xl font-light text-muted-foreground/50">?</span>
+                      <span className="text-3xl font-light text-muted-foreground/40">?</span>
                     )}
                   </div>
                 ))}
@@ -256,10 +271,11 @@ export function GameGrid({
 
             {/* Squares Grid */}
             <div
-              className="grid bg-muted/30 rounded-md p-0.5"
+              className="grid"
               style={{
                 gridTemplateColumns: `repeat(10, ${CELL_SIZE}px)`,
-                gap: GAP_SIZE
+                gap: GAP_SIZE,
+                marginLeft: GAP_SIZE
               }}
             >
               {Array.from({ length: 10 }).map((_, row) =>
