@@ -12,6 +12,7 @@ interface SquareProps {
   isSelected: boolean;
   onClick: () => void;
   colorPrimary: string;
+  size?: number;
 }
 
 export function Square({
@@ -20,6 +21,7 @@ export function Square({
   isSelected,
   onClick,
   colorPrimary,
+  size = 48,
 }: SquareProps) {
   const getInitials = (name: string) => {
     return name
@@ -35,7 +37,7 @@ export function Square({
       type="button"
       onClick={onClick}
       className={cn(
-        "w-10 h-10 rounded-sm text-xs font-medium transition-all duration-150",
+        "rounded-sm text-xs font-medium transition-all duration-150",
         "hover:scale-110 hover:z-10 hover:shadow-lg",
         "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1",
         "touch-manipulation active:scale-95",
@@ -60,6 +62,8 @@ export function Square({
         isSelected && "ring-2 ring-offset-2 bg-primary/10 border-primary border-2"
       )}
       style={{
+        width: size,
+        height: size,
         ...(isOwn && { borderColor: colorPrimary }),
         ...(isSelected && { borderColor: colorPrimary }),
       }}

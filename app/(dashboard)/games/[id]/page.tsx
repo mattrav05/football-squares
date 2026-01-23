@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { GameGrid } from "@/components/grid/game-grid";
 import { LegalDisclaimer } from "@/components/shared/legal-disclaimer";
 import { CopyButton } from "@/components/shared/copy-button";
+import { QRCode } from "@/components/shared/qr-code";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import { Calendar, DollarSign, Users, CheckCircle, Clock, Share2 } from "lucide-react";
 
@@ -174,15 +175,20 @@ export default async function GamePage({ params }: GamePageProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <code className="flex-1 rounded-lg bg-background border px-4 py-3 text-sm break-all font-mono">
-                {shareUrl}
-              </code>
-              <CopyButton text={shareUrl} />
+            <div className="flex flex-col sm:flex-row items-start gap-4">
+              <QRCode value={shareUrl} size={100} />
+              <div className="flex-1 space-y-3">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                  <code className="flex-1 rounded-lg bg-background border px-4 py-3 text-sm break-all font-mono">
+                    {shareUrl}
+                  </code>
+                  <CopyButton text={shareUrl} />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Scan the QR code or share this link with friends so they can join and pick squares
+                </p>
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              Send this link to friends so they can join and pick squares
-            </p>
           </CardContent>
         </Card>
       )}
