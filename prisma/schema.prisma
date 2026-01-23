@@ -46,6 +46,7 @@ model Game {
   maxSquaresPerPlayer Int        @default(10)
   colorPrimary        String     @default("#3b82f6")
   colorSecondary      String     @default("#10b981")
+  accessPassword      String?    // Hashed password for game access (optional)
   lockedAt            DateTime?
   paidAt              DateTime?
   createdAt           DateTime   @default(now())

@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DeleteGameButton } from "@/components/dashboard/delete-game-button";
+import { GamePasswordSettings } from "@/components/dashboard/game-password-settings";
 import { formatDate } from "@/lib/utils";
 
 interface SettingsPageProps {
@@ -161,6 +162,12 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
           </form>
         </CardContent>
       </Card>
+
+      {/* Password Protection */}
+      <GamePasswordSettings
+        gameId={game.id}
+        hasPassword={!!game.accessPassword}
+      />
 
       {/* Game Info (Read-only) */}
       <Card>

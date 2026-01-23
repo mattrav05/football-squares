@@ -9,8 +9,9 @@ import { GameGrid } from "@/components/grid/game-grid";
 import { LegalDisclaimer } from "@/components/shared/legal-disclaimer";
 import { CopyButton } from "@/components/shared/copy-button";
 import { QRCode } from "@/components/shared/qr-code";
+import { GameContentWrapper } from "@/components/game/game-content-wrapper";
 import { formatDate, formatCurrency } from "@/lib/utils";
-import { Calendar, DollarSign, Users, CheckCircle, Clock, Share2 } from "lucide-react";
+import { DollarSign, Users, CheckCircle, Clock, Share2 } from "lucide-react";
 
 interface GamePageProps {
   params: Promise<{ id: string }>;
@@ -38,8 +39,11 @@ async function getGame(id: string, userId: string) {
 
   const isManager = game.managerId === userId;
   const isPlayer = game.players.some((p) => p.userId === userId);
+  const requiresPassword = !!game.accessPassword;
+  // Manager or existing player has access without password
+  const hasAccess = isManager || isPlayer;
 
-  return { game, isManager, isPlayer };
+  return { game, isManager, isPlayer, requiresPassword, hasAccess };
 }
 
 export default async function GamePage({ params }: GamePageProps) {
@@ -56,7 +60,7 @@ export default async function GamePage({ params }: GamePageProps) {
     notFound();
   }
 
-  const { game, isManager } = result;
+  const { game, isManager, requiresPassword, hasAccess } = result;
 
   const stats = {
     available: game.squares.filter((s) => s.status === "AVAILABLE").length,
@@ -67,6 +71,12 @@ export default async function GamePage({ params }: GamePageProps) {
   const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL || ""}/join/${game.entryCode}`;
 
   return (
+    <GameContentWrapper
+      gameId={game.id}
+      gameName={game.name}
+      requiresPassword={requiresPassword}
+      hasAccess={hasAccess}
+    >
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -246,5 +256,6 @@ export default async function GamePage({ params }: GamePageProps) {
       {/* Legal */}
       <LegalDisclaimer />
     </div>
+    </GameContentWrapper>
   );
 }
