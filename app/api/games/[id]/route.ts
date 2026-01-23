@@ -75,6 +75,33 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       );
     }
 
+    // Handle lock action
+    if (body.action === "lock") {
+      if (game.status !== "OPEN") {
+        return NextResponse.json(
+          { message: "Game is not open" },
+          { status: 400 }
+        );
+      }
+
+      const updatedGame = await prisma.game.update({
+        where: { id },
+        data: {
+          status: "LOCKED",
+          lockedAt: new Date(),
+          numbersRow: Array.from({ length: 10 }, (_, i) => i).sort(
+            () => Math.random() - 0.5
+          ),
+          numbersCol: Array.from({ length: 10 }, (_, i) => i).sort(
+            () => Math.random() - 0.5
+          ),
+        },
+      });
+
+      return NextResponse.json(updatedGame);
+    }
+
+    // Handle regular updates
     const updatedGame = await prisma.game.update({
       where: { id },
       data: {

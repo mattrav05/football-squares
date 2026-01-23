@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PendingConfirmations } from "@/components/dashboard/pending-confirmations";
 import { PlayerManagement } from "@/components/dashboard/player-management";
+import { QuickActions } from "@/components/dashboard/quick-actions";
 import { formatDate } from "@/lib/utils";
-import { Grid3X3, CheckCircle, Clock, Users, Lock, Mail, Download, Zap } from "lucide-react";
+import { Grid3X3, CheckCircle, Clock, Users } from "lucide-react";
 
 interface ManagePageProps {
   params: Promise<{ id: string }>;
@@ -157,54 +158,13 @@ export default async function ManagePage({ params }: ManagePageProps) {
       </div>
 
       {/* Quick Actions */}
-      <Card>
-        <CardHeader className="pb-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <Zap className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>Manage your game status and communicate with players</CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="flex flex-wrap gap-3">
-          {game.status === "OPEN" && (
-            <form
-              action={async () => {
-                "use server";
-                await prisma.game.update({
-                  where: { id: game.id },
-                  data: {
-                    status: "LOCKED",
-                    lockedAt: new Date(),
-                    numbersRow: Array.from({ length: 10 }, (_, i) => i).sort(
-                      () => Math.random() - 0.5
-                    ),
-                    numbersCol: Array.from({ length: 10 }, (_, i) => i).sort(
-                      () => Math.random() - 0.5
-                    ),
-                  },
-                });
-              }}
-            >
-              <Button type="submit" variant="destructive" className="gap-2">
-                <Lock className="h-4 w-4" />
-                Lock Grid & Generate Numbers
-              </Button>
-            </form>
-          )}
-          <Button variant="outline" disabled className="gap-2">
-            <Mail className="h-4 w-4" />
-            Send Reminders
-          </Button>
-          <Button variant="outline" disabled className="gap-2">
-            <Download className="h-4 w-4" />
-            Export Data
-          </Button>
-        </CardContent>
-      </Card>
+      <QuickActions
+        gameId={game.id}
+        gameStatus={game.status}
+        availableSquares={stats.available}
+        reservedSquares={stats.reserved}
+        confirmedSquares={stats.confirmed}
+      />
 
       {/* Pending Confirmations */}
       <PendingConfirmations gameId={game.id} players={pendingPlayers} />
